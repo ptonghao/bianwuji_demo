@@ -36,19 +36,19 @@ var PlateReader = YesterdayData{
 func LoadDatas() {
 	// 加载温度计温度
 	go func() {
-		time.Sleep(3 * time.Second)
+		time.Sleep(1 * time.Second)
 		LoadTemperature()
 	}()
 
 	// 加载机械臂位置
 	go func() {
-		time.Sleep(3 * time.Second)
+		time.Sleep(1 * time.Second)
 		LoadPosition()
 	}()
 
 	// 加载酶标仪
 	go func() {
-		time.Sleep(3 * time.Second)
+		time.Sleep(1 * time.Second)
 		LoadPlateReader()
 	}()
 
@@ -71,6 +71,7 @@ func GetPlateReader(startTime, endTime int64) []string {
 	return PlateReader.QueryDatas(startTime, endTime)
 }
 
+// mock数据
 func MockDataCallBack(pType string, timeSamp int64, value string) bool {
 	if pType == "t" {
 		Temperature.Add(timeSamp, value)

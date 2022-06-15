@@ -20,7 +20,7 @@ import (
 // QueryData 查询数据
 func QueryData(context *gin.Context) {
 	// 解析参数
-	p, err := AnalysisParam(context)
+	p, err := CheckParam(context)
 	if err != nil {
 		context.String(http.StatusOK, "解析参数错误, error=%v", err)
 		return
@@ -34,11 +34,10 @@ func QueryData(context *gin.Context) {
 	}
 
 	context.String(http.StatusOK, "result=%v", datas)
-	return
 }
 
-// AnalysisParam 解析参数
-func AnalysisParam(context *gin.Context) (ret products.Products, err error) {
+// CheckParam 解析参数
+func CheckParam(context *gin.Context) (ret products.Products, err error) {
 	// 数据的维度, current: 当前, day: 天, month: 月
 	dim := GetParam(context, "dim", "current")
 	if dim != consts.DIM_MONTH && dim != consts.DIM_DAY && dim != consts.DIM_CURRENT {
