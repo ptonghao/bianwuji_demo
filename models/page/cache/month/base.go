@@ -65,6 +65,14 @@ func (c *MonthData) QueryDatas(startTime, endTime int64) (ret []string) {
 	return
 }
 
+// Clear 清空内存数据
+func (c *MonthData) Clear() {
+	c.Lock.Lock()
+	defer c.Lock.Unlock()
+
+	c.TimeSlice = []int64{}
+}
+
 // var RedisCache = &redis.Client{}
 
 // func init() {

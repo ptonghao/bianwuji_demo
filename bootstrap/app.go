@@ -12,10 +12,16 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
+
+// StartCron 初始化任务调度器
+func StartCron() *CronTab {
+	cronTab := InitScheduler()
+	_ = cronTab.StartCron()
+	return cronTab
+}
 
 // QueryData 查询数据
 func QueryData(context *gin.Context) {
@@ -56,7 +62,7 @@ func CheckParam(context *gin.Context) (ret products.Products, err error) {
 
 	yes0 := utils.GetYesterday(0, 0, 0, 0)
 	yes23 := utils.GetYesterday(23, 59, 59, 0)
-	lastMonthStart, lastMonthEnd := GetLastMonth()
+	lastMonthStart, lastMonthEnd := utils.GetLastMonth()
 	// 开始时间
 	b := GetParam(context, "begin_time", "")
 	if !utils.NumberValid(b) {
@@ -127,14 +133,4 @@ func GetParam(context *gin.Context, field string, defaultVal string) string {
 		return context.DefaultPostForm(field, defaultVal)
 	}
 	return ""
-}
-
-// 获取上一个月的开始 结束 时间戳
-func GetLastMonth() (int64, int64) {
-	now := time.Now()
-	lastMonthFirstDay := now.AddDate(0, -1, -now.Day()+1)
-	lastMonthStart := time.Date(lastMonthFirstDay.Year(), lastMonthFirstDay.Month(), lastMonthFirstDay.Day(), 0, 0, 0, 0, now.Location()).Unix()
-	lastMonthEndDay := lastMonthFirstDay.AddDate(0, 1, -1)
-	lastMonthEnd := time.Date(lastMonthEndDay.Year(), lastMonthEndDay.Month(), lastMonthEndDay.Day(), 23, 59, 59, 0, now.Location()).Unix()
-	return lastMonthStart, lastMonthEnd
 }

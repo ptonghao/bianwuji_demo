@@ -1,6 +1,6 @@
 /*
  * @Author: Jimpu
- * @Description: 上个月的数据写入redis
+ * @Description: 上个月的数据写入redis或者go-cache
  */
 
 package month
@@ -54,6 +54,19 @@ func GetPosition(startTime, endTime int64) []string {
 // GetPlateReader 获取当前酶标仪
 func GetPlateReader(startTime, endTime int64) []string {
 	return PlateReader.QueryDatas(startTime, endTime)
+}
+
+// 清理重更新数据
+func CleanAndUpdateData() {
+	// 清空内存数据
+	Temperature.Clear()
+	Position.Clear()
+	PlateReader.Clear()
+
+	// 从db加载数据到内存
+	LoadTemperature()
+	LoadPosition()
+	LoadPlateReader()
 }
 
 // 从db加载数据到内存

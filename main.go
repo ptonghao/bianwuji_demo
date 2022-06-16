@@ -16,6 +16,8 @@ func main() {
 	engine := gin.Default() // 创建引擎
 	engine.POST("/query", bootstrap.QueryData)
 
+	cronTab := bootstrap.StartCron()
+	defer bootstrap.StopCron(cronTab)
 	// 启动引擎，监听8888端口
 	if err := engine.Run(":8888"); err != nil {
 		log.Print(err)

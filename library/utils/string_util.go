@@ -6,7 +6,6 @@
 package utils
 
 import (
-	"fmt"
 	"unicode"
 )
 
@@ -41,7 +40,7 @@ func FindBinarySearch(datas []int64, leftPtr int64, rightPtr int64, findNum int6
 		}
 		return int64(mPtr)
 	}
-	fmt.Println(fmt.Sprintf("FindBinarySearch len=%v, leftPtr=%v, rightPtr=%v, mPtr=%v", len(datas), leftPtr, rightPtr, mPtr))
+	// fmt.Println(fmt.Sprintf("FindBinarySearch len=%v, leftPtr=%v, rightPtr=%v, mPtr=%v", len(datas), leftPtr, rightPtr, mPtr))
 	if datas[mPtr] > findNum {
 		return FindBinarySearch(datas, leftPtr, mPtr-1, findNum)
 	} else if datas[mPtr] < findNum {

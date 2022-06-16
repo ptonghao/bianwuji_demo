@@ -6,7 +6,6 @@
 package yesterday
 
 import (
-	"bianwuji_demo/library/utils"
 	"bianwuji_demo/models/page/cache"
 	"time"
 )
@@ -51,9 +50,6 @@ func LoadDatas() {
 		time.Sleep(1 * time.Second)
 		LoadPlateReader()
 	}()
-
-	// 每天0点执行定时器任务,清理并重更新数据
-	utils.ScheduleTask(time.Now().Day(), 0, 0, 0, CleanAndUpdateData)
 }
 
 // GetTemperature 获取当前温度

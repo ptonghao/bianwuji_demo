@@ -26,19 +26,12 @@ func GetYesterday(hour, min, sec, msec int) int64 {
 	return int64(yes0.Unix())
 }
 
-// ScheduleTask 新建定时器
-func ScheduleTask(day, hour, min, second int, callback func()) {
-	go func() {
-		// 每天0时0分触发更新
-		t := time.NewTimer(SetTime(day, hour, min, second))
-		defer t.Stop()
-		for {
-			select {
-			case <-t.C:
-				// t.Reset(time.Hour * 24)
-				// 定时任务函数
-				callback()
-			}
-		}
-	}()
+// 获取上一个月的开始 结束 时间戳
+func GetLastMonth() (int64, int64) {
+	now := time.Now()
+	lastMonthFirstDay := now.AddDate(0, -1, -now.Day()+1)
+	lastMonthStart := time.Date(lastMonthFirstDay.Year(), lastMonthFirstDay.Month(), lastMonthFirstDay.Day(), 0, 0, 0, 0, now.Location()).Unix()
+	lastMonthEndDay := lastMonthFirstDay.AddDate(0, 1, -1)
+	lastMonthEnd := time.Date(lastMonthEndDay.Year(), lastMonthEndDay.Month(), lastMonthEndDay.Day(), 23, 59, 59, 0, now.Location()).Unix()
+	return lastMonthStart, lastMonthEnd
 }
