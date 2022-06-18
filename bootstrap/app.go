@@ -9,6 +9,7 @@ import (
 	"bianwuji_demo/library/utils"
 	"bianwuji_demo/models/page/consts"
 	"bianwuji_demo/models/page/service/products"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -21,6 +22,13 @@ func StartCron() *CronTab {
 	cronTab := InitScheduler()
 	_ = cronTab.StartCron()
 	return cronTab
+}
+
+// ResponseData 返回数据格式
+type ResponseData struct {
+	Status int         `json:"status"`  // 0 : 成功, 非零失败
+	Msg    string      `json:"message"` // 描述
+	Data   interface{} `json:"Data"`    //
 }
 
 // QueryData 查询数据
@@ -39,7 +47,12 @@ func QueryData(context *gin.Context) {
 		return
 	}
 
-	context.String(http.StatusOK, "result=%v", datas)
+	ret, _ := json.Marshal(ResponseData{
+		Status: 0,
+		Msg:    "success",
+		Data:   datas,
+	})
+	context.String(http.StatusOK, "%v", string(ret))
 }
 
 // CheckParam 解析参数

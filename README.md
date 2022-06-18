@@ -45,6 +45,10 @@
     3、bootstrap 包 gin简单路由
     4、bootstrap/scheduler 定时任务
     5、conf 包 环境等配置相关
+
+八、详细设计:
+    1、中文文档: doc/边无际详设.docx
+    2、英文文档: doc/Edgenesis detail design.docx
     
 
 
