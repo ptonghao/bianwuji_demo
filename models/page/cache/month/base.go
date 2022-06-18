@@ -46,8 +46,10 @@ func (c *MonthData) QueryDatas(startTime, endTime int64) (ret []string) {
 		return
 	}
 
+	// start := time.Now()
 	minIdx := utils.FindBinarySearch(c.TimeSlice, 0, int64(len(c.TimeSlice)-1), utils.Max(c.TimeSlice[0], startTime))
 	maxIdx := utils.FindBinarySearch(c.TimeSlice, 0, int64(len(c.TimeSlice)-1), utils.Min(c.TimeSlice[len(c.TimeSlice)-1], endTime))
+	// log.Println(fmt.Sprintf("QueryDatas TimeSlice.len=%v, minIdx=%v, maxIdx=%v, startTime=%v, endTime=%v, time=%v", len(c.TimeSlice), minIdx, maxIdx, startTime, endTime, time.Since(start)))
 	if minIdx == -1 || maxIdx == -1 {
 		return
 	}

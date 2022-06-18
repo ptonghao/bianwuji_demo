@@ -12,7 +12,7 @@
 三、方案缺点:
     1、业务热数据量大时,在更新重刷内存或者缓存时,所有请求会打到db
     2、内存里的数据必须都是有序的
-    
+
 四、模块逻辑说明:
     1、当前数据放在变量里
     2、前一天的数据放到内存(map)里,每天0点的时候定时更新.内存结构为slice+map,slice存采集数据的时间点,map存slice的下标和采集的数据, 
@@ -31,8 +31,10 @@
             end_time:   查询结束时间戳
 
 六、测试方案:
-    1、可以使用wrk进行压力测试
-
+    1、可以使用restful api 调用接口进行测试
+    2、模块单测
+        单测月级别数据: models/page/cache/month/month_test.go
+        单测天级别数据: models/page/cache/yesterday/yesterday_test.go
 
 七、目录结构说明:
     1、models/page 包里放业务逻辑代码
@@ -41,6 +43,8 @@
         3、service包: 产品工厂(温度计温度、机械臂位置、酶标仪)
     2、library 包 辅助工具
     3、bootstrap 包 gin简单路由
-    4、conf 包 环境等配置相关
+    4、bootstrap/scheduler 定时任务
+    5、conf 包 环境等配置相关
+    
 
 

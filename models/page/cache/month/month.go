@@ -7,6 +7,9 @@ package month
 
 import (
 	"bianwuji_demo/models/page/cache"
+	"bianwuji_demo/models/page/consts"
+	"fmt"
+	"log"
 	"time"
 )
 
@@ -20,25 +23,22 @@ var Temperature MonthData // 温度计温度
 var Position MonthData    // 机械臂位置
 var PlateReader MonthData // 酶标仪
 
-// LoadDatas 从db加载昨天的数据
+// LoadDatas 从db加载上个月的数据
 func LoadDatas() {
 	// 加载温度计温度
-	go func() {
-		time.Sleep(1 * time.Second)
-		LoadTemperature()
-	}()
+	tStart := time.Now()
+	LoadTemperature()
+	log.Println(fmt.Sprintf("LoadDatas 加载上个月 [温度计温度] 数据花费时间=%v", time.Since(tStart)))
 
 	// 加载机械臂位置
-	go func() {
-		time.Sleep(1 * time.Second)
-		LoadPosition()
-	}()
+	pStart := time.Now()
+	LoadPosition()
+	log.Println(fmt.Sprintf("LoadDatas 加载上个月 [机械臂位置] 数据花费时间=%v", time.Since(pStart)))
 
 	// 加载酶标仪
-	go func() {
-		time.Sleep(1 * time.Second)
-		LoadPlateReader()
-	}()
+	prStart := time.Now()
+	LoadPlateReader()
+	log.Println(fmt.Sprintf("LoadDatas 加载上个月 [酶标仪] 数据花费时间=%v", time.Since(prStart)))
 }
 
 // GetTemperature 获取当前温度
@@ -72,28 +72,28 @@ func CleanAndUpdateData() {
 // 从db加载数据到内存
 func LoadTemperature() {
 	// todo ...
-	cache.MockData("t", MockDataCallBack)
+	cache.MockLastMonthData(consts.P_TEMPERATURE, MockMonthDataCallBack)
 }
 
 // 从db加载数据到内存
 func LoadPosition() {
 	// todo ...
-	cache.MockData("p", MockDataCallBack)
+	cache.MockLastMonthData(consts.P_POSITION, MockMonthDataCallBack)
 }
 
 // 从db加载数据到内存
 func LoadPlateReader() {
 	// todo ...
-	cache.MockData("pr", MockDataCallBack)
+	cache.MockLastMonthData(consts.P_PLATEREADER, MockMonthDataCallBack)
 }
 
 // mock数据
-func MockDataCallBack(pType string, timeSamp int64, value string) bool {
-	if pType == "t" {
+func MockMonthDataCallBack(pType string, timeSamp int64, value string) bool {
+	if pType == consts.P_TEMPERATURE {
 		Temperature.Add(timeSamp, value)
-	} else if pType == "p" {
+	} else if pType == consts.P_POSITION {
 		Position.Add(timeSamp, value)
-	} else if pType == "pr" {
+	} else if pType == consts.P_PLATEREADER {
 		PlateReader.Add(timeSamp, value)
 	}
 	return true

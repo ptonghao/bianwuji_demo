@@ -5,18 +5,21 @@
 
 package current
 
-import "bianwuji_demo/models/page/cache"
+import (
+	"bianwuji_demo/models/page/cache"
+	"bianwuji_demo/models/page/consts"
+)
 
 var Temperature CurrentData // 温度计温度
 var Position CurrentData    // 机械臂位置
 var PlateReader CurrentData // 酶标仪
 
 func MockDataCallBack(pType string, timeSamp int64, value string) bool {
-	if pType == "t" {
+	if pType == consts.P_TEMPERATURE {
 		Temperature.Set(value)
-	} else if pType == "p" {
+	} else if pType == consts.P_POSITION {
 		Position.Set(value)
-	} else if pType == "pr" {
+	} else if pType == consts.P_PLATEREADER {
 		PlateReader.Set(value)
 	}
 	return false
@@ -25,11 +28,9 @@ func MockDataCallBack(pType string, timeSamp int64, value string) bool {
 func init() {
 	// 当实例启动的时候,从db里取出当前数据初始化
 	// todo ...
-	go func() {
-		cache.MockData("t", MockDataCallBack)
-		cache.MockData("p", MockDataCallBack)
-		cache.MockData("pr", MockDataCallBack)
-	}()
+	cache.MockCurrentData(consts.P_TEMPERATURE, MockDataCallBack)
+	cache.MockCurrentData(consts.P_POSITION, MockDataCallBack)
+	cache.MockCurrentData(consts.P_PLATEREADER, MockDataCallBack)
 }
 
 // SetTemperature 设置温度
